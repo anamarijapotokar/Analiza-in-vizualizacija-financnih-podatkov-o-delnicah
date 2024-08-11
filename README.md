@@ -1,6 +1,6 @@
 # Opis
 
-### Avtorica: Anamarija Potokar
+Avtorica: Anamarija Potokar
 
 Pri svoji projektni nalogi pri Uvodu v programiranje sem uvozila, shranila in analizirala podatke o delnicah izbranih petih podjetij za obdobje enega leta med določenima datumoma. S spletne strani [Yahoo Finance](https://finance.yahoo.com) sem uvozila in izluščila podatke, ki so me zanimali za nadaljnjo analizo: cene ob začetku in koncu trgovalnega dne, najnižje in najvišje cene ter volumen oziroma obseg trgovanja. Podatke za posamezno delnico sem shranila tudi v CSV datoteko s tabelo vrednosti za večjo preglednost. 
 
