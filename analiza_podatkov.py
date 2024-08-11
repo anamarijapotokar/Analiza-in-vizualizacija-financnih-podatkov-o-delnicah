@@ -6,6 +6,7 @@ import numpy as np
 # računanje DNEVNEGA RAZPONA in dodajanje tega v tabele
 def dnevni_razpon(podatki_slovar):
     nov_slovar = {}
+
     for delnica, podatki in podatki_slovar.items():
         podatki['Dnevni razpon'] = podatki['Najvišja cena'].astype(float) - podatki['Najnižja cena'].astype(float)
         nov_slovar[delnica] = podatki
@@ -42,7 +43,7 @@ def preveri_moc_trenda(podatki_slovar):
             else:
                 moc_trenda.append("Manj stabilen trend")
         
-        moc_trenda.insert(0, "Ni podatkov za primerjavo")  # na prvi dan nimaš s ničemr za primerjat
+        moc_trenda.insert(0, "Ni podatkov za primerjavo")  # na prvi dan nimaš s ničemer za primerjat
         podatki['Moč trenda'] = moc_trenda
         
         nov_slovar[delnica] = podatki
@@ -52,7 +53,6 @@ def preveri_moc_trenda(podatki_slovar):
 
 
 # izris grafa za katerokoli delnico in katerokoli ceno (ob začetku, koncu trgovalnega dne, najvišjo ali najnižjo)
-
 def graf_cene(podatki_slovar, stolpec):
     plt.figure(figsize=(14, 10))
     
@@ -77,7 +77,6 @@ def graf_cene(podatki_slovar, stolpec):
 
 
 # VOLATILNOST + GRAF
-
 def izracun_volatilnosti(podatki_slovar):
     volatilnosti_slovar = {}
     
@@ -133,15 +132,15 @@ def izracunaj_RSI(podatki_slovar, obdobje=14):
         poz_spr = sprememba.where(sprememba > 0, 0) # = gains; nadomestiš vrednosti, kjer pogoj sprememba > 0 ni izpolnjen, z vrednostjo 0
         neg_spr = -sprememba.where(sprememba < 0, 0) # = losses; ^ isto sam drgač pogoji
 
-        povp_poz_spr = poz_spr.rolling(window=obdobje, min_periods=1).mean() # dam še te min periods, ker pol ne bo NAjev, ker tudi če je manj vrednosti kot je velikost obdobja, se bo računalo povprečje na podlagi podatkov, ki so na voljo, dokler je na voljo vsaj ena vrednost (drgač prvih 13 pa zadnjih 13 dni nebi imelo podatka o RSIju)
-        povp_neg_spr = neg_spr.rolling(window=obdobje, min_periods=1).mean() # ta rolling ustvar ubistvu drseče okno (= ko se okno premika, zajema podatke določene velikosti vzorca)
+        povp_poz_spr = poz_spr.rolling(window=obdobje).mean() 
+        povp_neg_spr = neg_spr.rolling(window=obdobje).mean()
 
         RS = povp_poz_spr / povp_neg_spr # relativna moč = RS
         RSI = 100 - (100 / (1 + RS)) # formula za RSI
 
         tabela_podatkov['RSI'] = RSI # RSI v tabelce
 
-        tabela_podatkov['Status'] = np.where(pd.isna(RSI), 'Ni podatkov', # za prvi dan ni podatkov, ker nimamo na podlagi česa računat povprečja
+        tabela_podatkov['Status'] = np.where(pd.isna(RSI), 'Ni podatkov', # nadomestim NAje z ni podatkov
                                              pd.cut(RSI, bins=[-float('inf'), 30, 70, float('inf')],
                                                     labels=['Podkupljena', 'Nevtralna', 'Prekupljena']))
 
